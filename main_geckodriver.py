@@ -46,7 +46,6 @@ class Bot:
                 x = WebDriverWait(bot, 20).until(EC.visibility_of_element_located(
                     (By.CSS_SELECTOR, "div[data-testid='like'][role='button']"))).click()
 
-
 busqueda = sys.argv[1:]
 prueba = Bot(USER_NAME, PASSWORD, busqueda)
 prueba.login()

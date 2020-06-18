@@ -48,6 +48,17 @@ class Bot_Tweepy:
                 except Exception as e:
                     print("Error al dar retweet")
 
+    def actualizar_descripcion(self, desc):
+        if len(desc) <= 160:
+            api = self.api
+            try:
+                api.update_profile(description=desc)
+                print("Perfil actualizado exitosamente")
+            except:
+                print("No se pudo actualizar el perfil")
+        else:
+            print("Número de caracteres excedido")
+
 
 class MyStreamListener(tweepy.StreamListener):
     def __init__(self, api):
@@ -62,15 +73,16 @@ class MyStreamListener(tweepy.StreamListener):
             print("Error detected")
 
 class Bot:
-    def __init__(self, bot_tweepy, listener):
+    def __init__(self, bot_tweepy):
         self.bot_tweepy = bot_tweepy
-        self.listener = listener
+        #self.listener = listener
 
 
     def validarOpcion(self, opc):
-        opciones = ["1","2","3"]
+        opciones_tweet = ["1","2","3"]
+        opciones_perfil = ["4"]
         bot = self.bot_tweepy
-        if opc in opciones:
+        if opc in opciones_tweet:
             print("Escriba la palabra con la que quiere relacionar su busqueda")
             hashtag = input()
             tweets = bot.buscar_tweets(hashtag)
@@ -81,6 +93,11 @@ class Bot:
             elif opc == "3":
                 bot.dar_like(tweets)
                 bot.dar_retweet(tweets)
+        elif opc in opciones_perfil:
+            if opc == "4":
+                print("Escriba la descripción:")
+                desc = input()
+                bot.actualizar_descripcion(desc)
         else:
             print("Por favor ingrese una opción valida")
         return "Acción terminada"
@@ -94,7 +111,7 @@ class Bot:
     def mostrar_menu(self):
         print("Prueba bot interactivo para Twitter")
         print("Por favor ingrese una opción valida")
-        print("1: Dar fav\n2: Dar Retweet\n3: Fav y Retweet\n0: Salir")
+        print("1: Dar fav\n2: Dar Retweet\n3: Fav y Retweet\n4: Acualizar Perfil\n0: Salir")
         accion = input()
         return accion
 
@@ -104,8 +121,10 @@ if __name__ == '__main__':
     auth.set_access_token(access_token, access_token_secret)
     api = tweepy.API(auth, wait_on_rate_limit=True, wait_on_rate_limit_notify=True)
     bot_1 = Bot_Tweepy(auth, api)
-    tweepy_listener = MyStreamListener(api)
-    bot = Bot(bot_1, tweepy_listener)
+    print(bot_1.verificar_credenciales())
+    print(consumer_key," ",consumer_secret)
+    #tweepy_listener = MyStreamListe-ner(api)
+    bot = Bot(bot_1)
     bot.iniciar()
 
 

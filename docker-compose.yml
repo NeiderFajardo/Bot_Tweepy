@@ -1,0 +1,10 @@
+version: '3.4'
+
+services:
+  api:
+    build: .
+    image: 'twitter_bot'
+    stdin_open: true # docker run -i
+    tty: true        # docker run -t
+    container_name: 'twitter_bot_compose'
+

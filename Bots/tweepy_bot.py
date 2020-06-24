@@ -91,14 +91,17 @@ class Bot:
         opciones_tweet = ["1","2","3"]
         opciones_perfil = ["4", "5"]
         bot = self.bot_tweepy
+        tweets = []
         if opc in opciones_tweet:
-            print("Escriba la palabra con la que quiere relacionar su busqueda")
-            hashtag = input()
+            print("Escriba las palabras con la que quiere relacionar su busqueda separadas por un coma(,)")
+            hashtag = input().split()
             print("¿Cuantas veces quiere realizar el proceso?\nIngrese el número de repeticiones:")
             repetir = int(input())
-            print("Iniciando...\nCtrl + C Para cancelar")
+            print("Iniciando...\nCtrl+C Para cancelar")
             for i in range(repetir):
-                tweets = bot.buscar_tweets(hashtag)
+                for t in hashtag:
+                    t = bot.buscar_tweets(hashtag)
+                    tweets.extend(t)
                 if opc == "1":
                     bot.dar_like(tweets)
                 elif opc == "2":
